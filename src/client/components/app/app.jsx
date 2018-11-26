@@ -11,6 +11,10 @@ export default class App extends Component {
     appName: 'Default App Name'
   };
 
+  componentDidMount() {
+    fetch('/api/test').then((res) => { console.log(res); });
+  }
+
   render() {
     const { appName } = this.props;
     return (

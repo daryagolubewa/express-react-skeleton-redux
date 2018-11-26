@@ -1,19 +1,9 @@
 import express from 'express';
-import handlebars from 'handlebars';
-import fs from 'fs';
-import path from 'path';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  const template = handlebars.compile(fs.readFileSync(
-    path.join(__dirname, 'index.hbs'),
-    'utf8',
-  ));
-  const context = {
-    title: 'Express React Skeleton'
-  };
-  res.send(template(context));
+router.get('/test', (req, res) => {
+  res.send({ test: 'test' });
 });
 
 export default router;
