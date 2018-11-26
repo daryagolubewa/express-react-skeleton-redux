@@ -31,7 +31,9 @@ module.exports = {
             presets: ['env', 'react'],
             plugins: [
               'transform-object-rest-spread',
-              'transform-class-properties'
+              'transform-class-properties',
+              'transform-runtime',
+              'transform-async-to-generator'
             ]
           }
         }

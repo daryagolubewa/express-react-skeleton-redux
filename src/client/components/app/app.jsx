@@ -12,7 +12,12 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    fetch('/api/test').then((res) => { console.log(res); });
+    const fetchFunc = async () => {
+      const res = await fetch('/api/test');
+      console.log(res);
+      return res;
+    };
+    fetchFunc();
   }
 
   render() {
