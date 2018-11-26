@@ -8,7 +8,7 @@
 Сделать GET запрос из Реакта и отрисовать что-нибудь, что вернется с сервера. 
 
 ### Realse 1
-Подключить в проект Bootstrap чтобы было посимпатичней. [Документация](https://getbootstrap.com/)
+Подключить в проект Bootstrap чтобы было посимпатичней. [Документация Bootstap](https://getbootstrap.com/)
 
 ### Realse 2
 Сделать крестики нолики по этому туториалу - [Tutorial](https://reactjs.org/tutorial/tutorial.html)
