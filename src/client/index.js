@@ -1,7 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/app/app';
+import { Router } from 'react-router';
+import createBrowserHistory from 'history/createBrowserHistory';
+import Routes from './routes/routes';
 
-const Index = () => <div><App appName='Express React Skeleton'/></div>;
+const history = createBrowserHistory();
+
+const Index = () => (
+  <Router history={history}>
+    <Routes />
+  </Router>
+);
 
 ReactDOM.render(<Index />, document.getElementById('react-app'));

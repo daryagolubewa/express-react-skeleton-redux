@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import Type from 'prop-types';
-import gridImg from './grid.png';
+import { Link } from 'react-router-dom';
+import elbrusImg from './elbrus.png';
+import { PAGES } from '../../routes/pages';
 
 export default class App extends Component {
   static propTypes = {
-    appName: Type.string
+    appName: Type.string,
+    children: Type.node.isRequired
   };
 
   static defaultProps = {
-    appName: 'Default App Name'
+    appName: 'Default Name'
   };
 
   componentDidMount() {
@@ -21,17 +24,17 @@ export default class App extends Component {
   }
 
   render() {
-    const { appName } = this.props;
+    const { appName, children } = this.props;
     return (
-      <div className='some class'>
+      <div className='app'>
         <h1>{ appName }</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <img src={ gridImg } width='800px' className='other-img' />
+        <img src={ elbrusImg } height='200px' />
+        <div><Link to={ PAGES.home.path }>Home Page</Link></div>
+        <div><Link to={ PAGES.info.path }>Info Page</Link></div>
+        <div><Link to={ PAGES.page404.path }>Page 404</Link></div>
+        <p>-----HEADER-----</p>
+        { children }
+        <p>-----FOOTER-----</p>
       </div>
     );
   }
