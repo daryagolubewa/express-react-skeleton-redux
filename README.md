@@ -22,5 +22,3 @@
 ### Realse 2
 Реализовать возможность добавлять комментарии к элементу
 - список все комментариев к элементу должен отображаться /items/:id/comments
-
-![Img Editable Grid](docs/grid.png?raw=true "Editable Grid")
