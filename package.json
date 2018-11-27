@@ -1,18 +1,27 @@
 {
   "name": "express-react-skeleton",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules**",
+      ".build/**",
+      "src/client/**"
+    ]
+  },
   "scripts": {
+    "test": "jest",
+    "test-watch": "jest --watch",
     "lint": "eslint . --ext .js,.jsx",
     "lint-fix": "eslint . --ext .js --fix",
     "build-server": "rimraf .build/ && babel ./src/server --out-dir .build/server/ --copy-files",
     "build-client": "webpack --mode production",
     "build": "npm run build-server && npm run build-client",
     "start-build": "NODE_ENV=localhost APP_MOCKS=0 node ./.build/server/app",
-    "start-server": "SERVICE_HOST=0.0.0.0:3001 NODE_ENV=localhost APP_MOCKS=0 APP_MODE_DEV=1 nodemon --exec babel-node src/server/app --ignore src/client",
+    "start-server": "SERVICE_HOST=0.0.0.0:3001 NODE_ENV=localhost APP_MOCKS=0 APP_MODE_DEV=1 nodemon --exec babel-node src/server/app",
     "start-client": "webpack-dev-server --mode development",
     "start": "node start.js"
   },
@@ -28,6 +37,7 @@
     "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
+    "autoprefixer": "^9.3.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
@@ -43,9 +53,14 @@
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jest": "^22.1.0",
     "eslint-plugin-react": "^7.11.1",
     "file-loader": "^2.0.0",
+    "jest": "^23.6.0",
     "nodemon": "^1.18.6",
+    "postcss-import": "^12.0.1",
+    "postcss-loader": "^3.0.0",
+    "postcss-nested": "^4.1.0",
     "rimraf": "^2.6.2",
     "style-loader": "^0.23.1",
     "webpack": "^4.25.1",

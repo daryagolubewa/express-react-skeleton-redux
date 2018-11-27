@@ -1,12 +1,14 @@
 module.exports = {
   env: {
     browser: true,
-    node: true
+    node: true,
+    "jest/globals": true
   },
   parser: "babel-eslint",
   extends: "airbnb-base",
   plugins: [
-    "react"
+    "react",
+    "jest"
   ],
   rules: {
     "comma-dangle": ["error", "never"],

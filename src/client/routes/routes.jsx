@@ -8,7 +8,7 @@ import InfoPage from '../components/info-page/info-page';
 import Page404 from '../components/page404/page404';
 
 const WrappedApp = (Component, props) => (
-  <App>
+  <App appName='Fancy React App'>
     <Component { ...props } />
   </App>
 );
