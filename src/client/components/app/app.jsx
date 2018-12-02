@@ -2,31 +2,37 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Type from 'prop-types';
 import { Link } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import elbrusImg from './elbrus.png';
 import { PAGES } from '../../routes/pages';
 import { bemClassNameFactory } from '../../utils/bem';
 import { sayByeAC, sayHiAC } from '../../redux/actions/app-actions';
 import { selectSay } from '../../redux/selectors/app-selectors';
+import { selectPathname } from '../../redux/selectors/router-selectors';
 import './app.css';
 
 const cn = bemClassNameFactory('app');
 
 const mapStateToProps = state => ({
-  say: selectSay(state)
+  say: selectSay(state),
+  pathname: selectPathname(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   sayBye: () => dispatch(sayByeAC()),
-  sayHi: () => dispatch(sayHiAC())
+  sayHi: () => dispatch(sayHiAC()),
+  doRoute: page => dispatch(push(page))
 });
 
 class App extends Component {
   static propTypes = {
     appName: Type.string,
     children: Type.node.isRequired,
+    say: Type.string,
+    pathname: Type.string,
     sayHi: Type.func,
     sayBye: Type.func,
-    say: Type.string
+    doRoute: Type.func
   };
 
   static defaultProps = {
@@ -50,6 +56,14 @@ class App extends Component {
     this.props.sayBye();
   };
 
+  handleRouteToInfoPage = () => {
+    this.props.doRoute(PAGES.info.path);
+  };
+
+  handleRouteToPage404 = () => {
+    this.props.doRoute(PAGES.page404.path);
+  };
+
   componentDidMount() {
     const fetchFunc = async () => {
       const res = await fetch('/api/test');
@@ -59,7 +73,12 @@ class App extends Component {
   }
 
   render() {
-    const { appName, children, say } = this.props;
+    const {
+      appName,
+      children,
+      say,
+      pathname
+    } = this.props;
     console.log(this.props);
     return (
       <div className={ cn() }>
@@ -103,6 +122,25 @@ class App extends Component {
             </div>
             <div>
               { say }
+            </div>
+            <div>
+              <button
+                className={ cn('button', 'red') }
+                onClick={ this.handleRouteToInfoPage }
+              >
+                Go to Info page
+              </button>
+            </div>
+            <div>
+              <button
+                className={ cn('button', 'red') }
+                onClick={ this.handleRouteToPage404 }
+              >
+                Go to Page 404
+              </button>
+            </div>
+            <div>
+              <b>Pathname</b>: { pathname }
             </div>
           </div>
         </div>

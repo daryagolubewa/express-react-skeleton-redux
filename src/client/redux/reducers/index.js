@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
 import appReducer from './app-reducer';
 
-const reducers = combineReducers({
-  app: appReducer
+const reducers = history => combineReducers({
+  app: appReducer,
+  router: connectRouter(history)
 });
 
 export default reducers;

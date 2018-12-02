@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { Router } from 'react-router';
+import { createStore, applyMiddleware } from 'redux';
+import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -10,6 +10,7 @@ import Routes from './routes/routes';
 
 const history = createBrowserHistory();
 const composeEnhancers = composeWithDevTools({});
+
 const initialState = {
   app: {
     name: 'Express React Skeleton',
@@ -17,13 +18,21 @@ const initialState = {
   }
 };
 
-const store = createStore(reducers, initialState, composeEnhancers());
+const store = createStore(
+  reducers(history),
+  initialState,
+  composeEnhancers(
+    applyMiddleware(
+      routerMiddleware(history)
+    )
+  )
+);
 
 const Index = () => (
   <Provider store={ store }>
-    <Router history={ history }>
+    <ConnectedRouter history={ history }>
       <Routes />
-    </Router>
+    </ConnectedRouter>
   </Provider>
 );
 
