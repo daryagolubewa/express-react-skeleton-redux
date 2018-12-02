@@ -10,5 +10,11 @@ export const PAGES = {
   page404: {
     name: 'page404',
     path: '/page404'
+  },
+  API: {
+    fetchUser: {
+      name: 'fetchUser',
+      path: '/api/user'
+    }
   }
 };

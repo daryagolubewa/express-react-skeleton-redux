@@ -7,21 +7,28 @@ import elbrusImg from './elbrus.png';
 import { PAGES } from '../../routes/pages';
 import { bemClassNameFactory } from '../../utils/bem';
 import { sayByeAC, sayHiAC } from '../../redux/actions/app-actions';
+import { fetchUserStartAC, fetchUserSuccessAC, fetchUserErrorAC } from '../../redux/actions/user-actions';
 import { selectSay } from '../../redux/selectors/app-selectors';
 import { selectPathname } from '../../redux/selectors/router-selectors';
+import { selectUser, selectIsUserFetching } from '../../redux/selectors/user-selectors';
 import './app.css';
 
 const cn = bemClassNameFactory('app');
 
 const mapStateToProps = state => ({
   say: selectSay(state),
-  pathname: selectPathname(state)
+  pathname: selectPathname(state),
+  userInfo: selectUser(state),
+  isUserFetching: selectIsUserFetching(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   sayBye: () => dispatch(sayByeAC()),
   sayHi: () => dispatch(sayHiAC()),
-  doRoute: page => dispatch(push(page))
+  doRoute: page => dispatch(push(page)),
+  fetchUserStart: () => dispatch(fetchUserStartAC()),
+  fetchUserSuccess: user => dispatch(fetchUserSuccessAC(user)),
+  fetchUserError: () => dispatch(fetchUserErrorAC())
 });
 
 class App extends Component {
@@ -30,9 +37,17 @@ class App extends Component {
     children: Type.node.isRequired,
     say: Type.string,
     pathname: Type.string,
+    userInfo: Type.shape({
+      name: Type.string,
+      email: Type.string
+    }),
+    isUserFetching: Type.bool,
     sayHi: Type.func,
     sayBye: Type.func,
-    doRoute: Type.func
+    doRoute: Type.func,
+    fetchUserStart: Type.func,
+    fetchUserSuccess: Type.func,
+    fetchUserError: Type.func
   };
 
   static defaultProps = {
@@ -64,20 +79,28 @@ class App extends Component {
     this.props.doRoute(PAGES.page404.path);
   };
 
+  fetchUser = async () => {
+    const { fetchUserStart, fetchUserSuccess, fetchUserError } = this.props;
+    try {
+      fetchUserStart();
+      const user = await fetch(PAGES.API.fetchUser.path);
+      const userInfo = await user.json();
+      console.log('userInfo', userInfo);
+      fetchUserSuccess(userInfo);
+    } catch (e) {
+      console.error(e);
+      fetchUserError();
+    }
+  };
+
   componentDidMount() {
-    const fetchFunc = async () => {
-      const res = await fetch('/api/test');
-      return res;
-    };
-    fetchFunc();
+    // this.fetchUser();
   }
 
   render() {
     const {
       appName,
-      children,
-      say,
-      pathname
+      children
     } = this.props;
     console.log(this.props);
     return (
@@ -104,48 +127,91 @@ class App extends Component {
           </div>
           <div className={ cn('button-block') }>
             <h2>Buttons Redux</h2>
-            <div>
-              <button
-                className={ cn('button', 'red') }
-                onClick={ this.handleClickSayHi }
-              >
-                Say Hi
-              </button>
-            </div>
-            <div>
-              <button
-                className={ cn('button', 'red') }
-                onClick={ this.handleClickSayBye }
-              >
-                Say Bye
-              </button>
-            </div>
-            <div>
-              { say }
-            </div>
-            <div>
-              <button
-                className={ cn('button', 'red') }
-                onClick={ this.handleRouteToInfoPage }
-              >
-                Go to Info page
-              </button>
-            </div>
-            <div>
-              <button
-                className={ cn('button', 'red') }
-                onClick={ this.handleRouteToPage404 }
-              >
-                Go to Page 404
-              </button>
-            </div>
-            <div>
-              <b>Pathname</b>: { pathname }
-            </div>
+            { this.renderSayButtons() }
+            { this.renderRoutingButtons() }
+            { this.renderUserButtons() }
           </div>
         </div>
         { children }
         <div className={ cn('footer') }>
+        </div>
+      </div>
+    );
+  }
+
+  renderSayButtons() {
+    return (
+      <div>
+        <h3>Say Buttons</h3>
+        <div>
+          <button
+            className={ cn('button', 'red') }
+            onClick={ this.handleClickSayHi }
+          >
+            Say Hi
+          </button>
+        </div>
+        <div>
+          <button
+            className={ cn('button', 'red') }
+            onClick={ this.handleClickSayBye }
+          >
+            Say Bye
+          </button>
+        </div>
+        <div>
+          { this.props.say }
+        </div>
+      </div>
+    );
+  }
+
+  renderRoutingButtons() {
+    return (
+      <div>
+        <h3>Router Push Buttons</h3>
+        <div>
+          <button
+            className={ cn('button', 'red') }
+            onClick={ this.handleRouteToInfoPage }
+          >
+            Go to Info page
+          </button>
+        </div>
+        <div>
+          <button
+            className={ cn('button', 'red') }
+            onClick={ this.handleRouteToPage404 }
+          >
+            Go to Page 404
+          </button>
+        </div>
+        <div>
+          <b>Pathname</b>: { this.props.pathname }
+        </div>
+      </div>
+    );
+  }
+
+  renderUserButtons() {
+    const { userInfo, isUserFetching } = this.props;
+    return (
+      <div>
+        <h3>User Buttons</h3>
+        <div>
+          <button
+            className={ cn('button', 'red') }
+            onClick={ this.fetchUser }
+          >
+            Fetch user
+          </button>
+        </div>
+        <div>
+          {
+            isUserFetching
+            && <div>Loading</div>
+          }
+          <b>User</b>: { userInfo.name }
         </div>
       </div>
     );
