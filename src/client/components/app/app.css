@@ -31,5 +31,9 @@
         &_blue {
             background-color: blue;
         }
+
+        &_red {
+            background-color: darkred;
+        }
     }
 }
