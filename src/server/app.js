@@ -5,7 +5,7 @@ import proxy from 'http-proxy-middleware';
 import handlebars from 'handlebars';
 import config from './config/default';
 import router from './router';
-
+import bodyParser from 'body-parser';
 const app = express();
 const { buildConfig: { assetsDir, targetDir }, server: { port }, proxyAssets } = config;
 
@@ -21,8 +21,8 @@ if (config.appModeDev) {
   );
 }
 
+app.use(bodyParser.json());
 app.use('/api', router);
-
 app.use('*', (req, res) => {
   const template = handlebars.compile(fs.readFileSync(
     path.join(__dirname, 'index.hbs'),

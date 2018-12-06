@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import { bemClassNameFactory } from '../../utils/bem';
+import '../app/app.css';
+
+const cn = bemClassNameFactory('app');
 
 export default class HomePage extends Component {
+
   render() {
     return (
       <div className='home-page'>
@@ -12,6 +17,11 @@ export default class HomePage extends Component {
           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
+          {/*<div className={ cn('button-block') } >*/}
+              {/*<button className={ cn('button') }>*/}
+                  {/*Login*/}
+              {/*</button>*/}
+          {/*</div>*/}
       </div>
     );
   }

@@ -12,23 +12,28 @@ import { selectSay } from '../../redux/selectors/app-selectors';
 import { selectPathname } from '../../redux/selectors/router-selectors';
 import { selectUser, selectIsUserFetching } from '../../redux/selectors/user-selectors';
 import './app.css';
+import {selectLogin, selectIsLoginFetching} from "../../redux/selectors/true-login-selector";
 
 const cn = bemClassNameFactory('app');
 
 const mapStateToProps = state => ({
-  say: selectSay(state),
-  pathname: selectPathname(state),
-  userInfo: selectUser(state),
-  isUserFetching: selectIsUserFetching(state)
+    say: selectSay(state),
+    pathname: selectPathname(state),
+    userInfo: selectUser(state),
+    isUserFetching: selectIsUserFetching(state),
+    login: state.login.user,
+    trueLogin: selectLogin(state) || '',
+    isLoginFetching: selectIsLoginFetching(state),
 });
 
+
 const mapDispatchToProps = dispatch => ({
-  sayBye: () => dispatch(sayByeAC()),
-  sayHi: () => dispatch(sayHiAC()),
-  doRoute: page => dispatch(push(page)),
-  fetchUserStart: () => dispatch(fetchUserStartAC()),
-  fetchUserSuccess: user => dispatch(fetchUserSuccessAC(user)),
-  fetchUserError: () => dispatch(fetchUserErrorAC())
+    sayBye: () => dispatch(sayByeAC()),
+    sayHi: () => dispatch(sayHiAC()),
+    doRoute: page => dispatch(push(page)),
+    fetchUserStart: () => dispatch(fetchUserStartAC()),
+    fetchUserSuccess: user => dispatch(fetchUserSuccessAC(user)),
+    fetchUserError: () => dispatch(fetchUserErrorAC())
 });
 
 class App extends Component {
@@ -97,6 +102,9 @@ class App extends Component {
     // this.fetchUser();
   }
 
+  print = () => {
+      console.log(this.props)
+  }
   render() {
     const {
       appName,
@@ -109,6 +117,18 @@ class App extends Component {
         <div className={ cn('header') }>
           <div className={ cn('logo') }>
             <img src={ elbrusImg } height='200px' />
+              <p>  </p>
+              <div>
+                  {
+                      this.props.isLoginFetching
+                      && <div>Loading</div>
+                  }
+              </div>
+              <div>{this.print()}</div>
+              <b>User</b>:
+              { this.props.trueLogin && (
+                  <div>{this.props.trueLogin.name}</div>
+              )}
           </div>
           <div className={ cn('menu') }>
             <h2>Menu</h2>
@@ -216,6 +236,10 @@ class App extends Component {
       </div>
     );
   }
+
+    renderGetWeatherButton() {
+
+    }
 }
 
 const VisibleApp = connect(
